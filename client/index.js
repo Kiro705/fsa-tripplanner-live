@@ -107,8 +107,10 @@ el('day-add').addEventListener('click', () => {
     plan.currentday = +button.value;
     removeAll();
     el('Day-' + (number + 1)).classList.add('selectedClass');
+    map.flyTo({center: [-74.0, 40.731], zoom: 13, curve: 2, speed: 0.5});
     renderDay();
   })
+  map.flyTo({center: [-74.0, 40.731], zoom: 13, curve: 2, speed: 0.5});
   el('day-container').append(button)
 })
 
@@ -174,6 +176,7 @@ el('Day-1').addEventListener('click', () => {
   plan.currentday = 0;
   removeAll();
   el('Day-1').classList.add('selectedClass');
+  map.flyTo({center: [-74.0, 40.731], zoom: 13, curve: 2, speed: 0.5});
   renderDay();
 })
 
