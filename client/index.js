@@ -98,8 +98,7 @@ el('day-add').addEventListener('click', () => {
   plan.addNewDay();
   var button = document.createElement('button');
   var number = plan.days.length - 1;
-  console.log('FLYING!');
-  map.flyTo({center: [-74.000000, 40.731000], zoom: 13, curve: 2, speed: 0.5});
+  map.flyTo({center: [-74.000000, 40.731000], zoom: 12, curve: 2, speed: 0.5});
   button.append(number + 1);
   button.className = 'btn btn-primary btn-circle backgroundGray margin5';
   button.value = number;
@@ -108,8 +107,7 @@ el('day-add').addEventListener('click', () => {
     plan.currentday = +button.value;
     removeAll();
     el('Day-' + (number + 1)).classList.add('selectedClass');
-    console.log('FLYING!');
-    map.flyTo({center: [-74.000000, 40.731000], zoom: 13, curve: 2, speed: 0.5});
+    map.flyTo({center: [-74.000000, 40.731000], zoom: 12, curve: 2, speed: 0.5});
     renderDay();
   })
   el('day-container').append(button)
@@ -172,8 +170,7 @@ function renderDay(){
 }
 
 el('Day-1').addEventListener('click', () => {
-  console.log('FLYING!');
-  map.flyTo({center: [-74.000000, 40.731000], zoom: 13, curve: 2, speed: 0.5});
+  map.flyTo({center: [-74.000000, 40.731000], zoom: 12, curve: 2, speed: 0.5});
   plan.currentday = 0;
   removeAll();
   el('Day-1').classList.add('selectedClass');
