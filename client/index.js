@@ -98,7 +98,8 @@ el('day-add').addEventListener('click', () => {
   plan.addNewDay();
   var button = document.createElement('button');
   var number = plan.days.length - 1;
-  console.log(typeof plan.currentday);
+  console.log('FLYING!');
+  map.flyTo({center: [-74.000000, 40.731000], zoom: 13, curve: 2, speed: 0.5});
   button.append(number + 1);
   button.className = 'btn btn-primary btn-circle backgroundGray margin5';
   button.value = number;
@@ -107,10 +108,10 @@ el('day-add').addEventListener('click', () => {
     plan.currentday = +button.value;
     removeAll();
     el('Day-' + (number + 1)).classList.add('selectedClass');
-    map.flyTo({center: [-74.0, 40.731], zoom: 13, curve: 2, speed: 0.5});
+    console.log('FLYING!');
+    map.flyTo({center: [-74.000000, 40.731000], zoom: 13, curve: 2, speed: 0.5});
     renderDay();
   })
-  map.flyTo({center: [-74.0, 40.731], zoom: 13, curve: 2, speed: 0.5});
   el('day-container').append(button)
 })
 
@@ -122,7 +123,6 @@ var setListeners = function(Placetype) {
     var selectedObj = globalstore[Placetype][selectedChoice]
     addSelectedPlace(selectedObj, selectedChoice, placetype);
     map.flyTo({center: selectedObj.place.location, zoom: 15, curve: 2, speed: 0.5});
-    console.log(planThing);
   })
 }
 
@@ -158,7 +158,6 @@ function renderDay(){
 
               </ul>
             </div>`;
-  console.log(planThing);
   for (var place in {Hotels: 'hotels', Restaurants: 'restaurants', Activities: 'activities'}){
     var upper = place.toString();
     var lower = upper.toLowerCase();
@@ -173,10 +172,11 @@ function renderDay(){
 }
 
 el('Day-1').addEventListener('click', () => {
+  console.log('FLYING!');
+  map.flyTo({center: [-74.000000, 40.731000], zoom: 13, curve: 2, speed: 0.5});
   plan.currentday = 0;
   removeAll();
   el('Day-1').classList.add('selectedClass');
-  map.flyTo({center: [-74.0, 40.731], zoom: 13, curve: 2, speed: 0.5});
   renderDay();
 })
 
