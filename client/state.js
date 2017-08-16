@@ -51,5 +51,5 @@ Plan.prototype.switchDays = function (idx) {
     this.currentday = idx
 }
 
-
 module.exports = {State, Plan}  //, days}
+

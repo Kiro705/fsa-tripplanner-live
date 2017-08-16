@@ -26,6 +26,7 @@ var mapData = function (data, targetElement) {
 }
 var globalstore = {}
 var plan = new Plan()
+var planThing = plan.days[plan.currentday];
 
 var el = x => document.getElementById(x)
 
@@ -59,34 +60,57 @@ var makePopupHTML = (placetype, selectedObj) => {
 }
 
 function addPlaceDiv(selectedObj, selectedChoice, placetype){
-  if (plan.addPlaceToCurrentDay(placetype, selectedChoice)) {
-      var temp = document.createElement('li')
-      temp.className = 'list-group-item';
+  var temp = document.createElement('li')
+  temp.className = 'list-group-item';
 
-      //make the button to remove the selected place
-      var button = document.createElement('button');
-      button.append('x');
-      button.className = 'btn btn-sm btn-danger pull-right reallysmallbtn';
-      temp.append(selectedObj.name);
-      temp.append(button);
-      el(placetype + '-list').append(temp)
-      var newmarker = buildMarker(placetype, selectedObj.place.location)
+  //make the button to remove the selected place
+  var button = document.createElement('button');
+  button.append('x');
+  button.className = 'btn btn-sm btn-danger pull-right reallysmallbtn';
+  temp.append(selectedObj.name);
+  temp.append(button);
+  el(placetype + '-list').append(temp)
+  var newmarker = buildMarker(placetype, selectedObj.place.location)
 
-      // make popup
-      var popup = new mapboxgl.Popup({offset: 25})
-          .setHTML(makePopupHTML(placetype, selectedObj))
-      newmarker.setPopup(popup)
-      newmarker.addTo(map)
-      // make removal possible
-      button.onclick = function(){
-        temp.remove();
-        newmarker.remove();
-        plan.removePlaceFromCurrentDay(placetype, selectedChoice)
-        map.flyTo({center: selectedObj.place.location, zoom: 13, curve: 2, speed: 0.5});
-      }
-      //fly to the new marker once done
-    }
+  // make popup
+  var popup = new mapboxgl.Popup({offset: 25})
+      .setHTML(makePopupHTML(placetype, selectedObj))
+  newmarker.setPopup(popup)
+  newmarker.addTo(map)
+  // make removal possible
+  button.onclick = function(){
+    temp.remove();
+    newmarker.remove();
+    plan.removePlaceFromCurrentDay(placetype, selectedChoice)
+    map.flyTo({center: selectedObj.place.location, zoom: 13, curve: 2, speed: 0.5});
+  }
 }
+
+function addSelectedPlace(selectedObj, selectedChoice, placetype){
+  if (plan.addPlaceToCurrentDay(placetype, selectedChoice)) {
+    addPlaceDiv(selectedObj, selectedChoice, placetype);
+  }
+}
+
+el('day-add').addEventListener('click', () => {
+  plan.addNewDay();
+  var button = document.createElement('button');
+  var number = plan.days.length - 1;
+  console.log(typeof plan.currentday);
+  button.append(number + 1);
+  button.className = 'btn btn-primary btn-circle';
+  button.value = number;
+  button.addEventListener('click', () => {
+    plan.currentday = +button.value;
+    renderDay();
+  })
+  el('day-container').append(button)
+})
+
+el('Day-1').addEventListener('click', () => {
+  plan.currentday = 0;
+  renderDay();
+})
 
 var setListeners = function(Placetype) {
   var placetype = Placetype.toLowerCase()
@@ -94,12 +118,14 @@ var setListeners = function(Placetype) {
   el(placetype + '-add').addEventListener('click', () => {
     var selectedChoice = el(placetype + '-choices').value // position in the array, not really the placeId
     var selectedObj = globalstore[Placetype][selectedChoice]
-    addPlaceDiv(selectedObj, selectedChoice, placetype);
+    addSelectedPlace(selectedObj, selectedChoice, placetype);
     map.flyTo({center: selectedObj.place.location, zoom: 15, curve: 2, speed: 0.5});
+    console.log(planThing);
   })
 }
 
 function renderDay(){
+  planThing = plan.days[plan.currentday];
   el('myStuff').innerHTML = `<div>
               <h4>My Hotel</h4>
               <ul class="list-group" id="hotels-list">
@@ -118,14 +144,21 @@ function renderDay(){
 
               </ul>
             </div>`;
-  var planThing = plan.days[plan.currentday]
-  for (var place in {hotels: 'hotels', restaurants: 'restaurants', activities: 'activities'}){
-    console.log(planThing[place]);
+  console.log(planThing);
+  for (var place in {Hotels: 'hotels', Restaurants: 'restaurants', Activities: 'activities'}){
+    var upper = place.toString();
+    var lower = upper.toLowerCase();
+    var placeArray = planThing[lower]; //the array
+    placeArray.forEach(function(number){
+      //is number
+      //var selectedChoice = el(lower + '-choices').value
+      var selectedObj = globalstore[upper][number]
+      addPlaceDiv(selectedObj, number, lower)
+    })
   }
 }
 
 renderDay();
-// ['Hotels', 'Restaurants', 'Activities'].forEach(x => setListeners(x))
 setListeners('Hotels')
 setListeners('Restaurants')
 setListeners('Activities')
@@ -143,3 +176,8 @@ for (var i = 0; i < inputs.length; i++) {
     inputs[i].onclick = switchLayer;
 }
 // END https://www.mapbox.com/mapbox-gl-js/example/setstyle/
+
+
+
+
+

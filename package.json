@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start:dev": "webpack -w & nodemon server/app.js",
-    "start": "node server/app.js",
+    "start": "npm run  start:dev",
     "test": "mocha -w test/*.spec.js"
   },
   "license": "MIT",
