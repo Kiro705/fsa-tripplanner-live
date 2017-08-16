@@ -1,7 +1,7 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
-$light-blue: #a8c9dd;
-$medium-brown: #736357;
+$light-blue: #303030;
+$medium-brown: #c46156;
 $transparent: rgba(0, 0, 0, 0);
 
 $screen-sm: 768px;
@@ -217,8 +217,42 @@ h3 {
       padding: 0
     }
 
+    .margin5 {
+      margin-right: 4px
+    }
+
+    .backgroundGray {
+      background-color: gray
+    }
+
+    .backgroundLightGray {
+      background-color: lightgray;
+      border-radius: 10px;
+      border: solid gray 2px;
+
+    }
+
+    .h3Text{
+      color: #6d6c6c;
+    }
+
+    .selectedClass {
+      background-color: #723535
+    }
+
+    .paddingLeft15 {
+      padding: 0 15px
+    }
+
+    #itinerary {
+      padding: 0;
+    }
+
+    #day-container {
+      margin-top: 0;
+    }
 
 
 
 
-    
+

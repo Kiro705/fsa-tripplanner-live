@@ -564,6 +564,7 @@ var mapData = function (data, targetElement) {
 var globalstore = {}
 var plan = new Plan()
 var planThing = plan.days[plan.currentday];
+var markerArray = [];
 
 var el = x => document.getElementById(x)
 
@@ -608,6 +609,7 @@ function addPlaceDiv(selectedObj, selectedChoice, placetype){
   temp.append(button);
   el(placetype + '-list').append(temp)
   var newmarker = buildMarker(placetype, selectedObj.place.location)
+  markerArray.push(newmarker);
 
   // make popup
   var popup = new mapboxgl.Popup({offset: 25})
@@ -635,18 +637,16 @@ el('day-add').addEventListener('click', () => {
   var number = plan.days.length - 1;
   console.log(typeof plan.currentday);
   button.append(number + 1);
-  button.className = 'btn btn-primary btn-circle';
+  button.className = 'btn btn-primary btn-circle backgroundGray margin5';
   button.value = number;
+  button.id = 'Day-' + (number + 1);
   button.addEventListener('click', () => {
     plan.currentday = +button.value;
+    removeAll();
+    el('Day-' + (number + 1)).classList.add('selectedClass');
     renderDay();
   })
   el('day-container').append(button)
-})
-
-el('Day-1').addEventListener('click', () => {
-  plan.currentday = 0;
-  renderDay();
 })
 
 var setListeners = function(Placetype) {
@@ -661,23 +661,35 @@ var setListeners = function(Placetype) {
   })
 }
 
+function removeAll(){
+  var num = 1
+  while (el('Day-' + num)){
+    el('Day-' + num).classList.remove('selectedClass');
+    num++;
+  }
+}
+
 function renderDay(){
   planThing = plan.days[plan.currentday];
+  while (markerArray.length){
+    var temp = markerArray.shift()
+    temp.remove();
+  }
   el('myStuff').innerHTML = `<div>
-              <h4>My Hotel</h4>
-              <ul class="list-group" id="hotels-list">
+              <h4 class="h3Text paddingLeft15">My Hotel</h4>
+              <ul class="list-group paddingLeft15" id="hotels-list">
 
               </ul>
             </div>
             <div>
-              <h4>My Restaurants</h4>
-              <ul class="list-group" id="restaurants-list">
+              <h4 class="h3Text paddingLeft15">My Restaurants</h4>
+              <ul class="list-group paddingLeft15" id="restaurants-list">
 
               </ul>
             </div>
             <div>
-              <h4>My Activities</h4>
-              <ul class="list-group" id="activities-list">
+              <h4 class="h3Text paddingLeft15">My Activities</h4>
+              <ul class="list-group paddingLeft15" id="activities-list">
 
               </ul>
             </div>`;
@@ -694,6 +706,13 @@ function renderDay(){
     })
   }
 }
+
+el('Day-1').addEventListener('click', () => {
+  plan.currentday = 0;
+  removeAll();
+  el('Day-1').classList.add('selectedClass');
+  renderDay();
+})
 
 renderDay();
 setListeners('Hotels')
