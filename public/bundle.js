@@ -578,10 +578,10 @@ fetch('/api/all')
   })
   .catch(console.error)
 
-var makePopupHTML = (placetype, selectedObj) => {
+var makePopupHTML = (Placetype, selectedObj) => {
     var popupHTML = `<h3>${selectedObj.name}</h3>`;
     popupHTML += `<p>Address: ${selectedObj.place.address}</p>`;
-    switch (placetype) {
+    switch (Placetype) {
       case 'Hotels':
         popupHTML += `<p>Stars: ${selectedObj.num_stars}</p>`;
         popupHTML += `<p>Amenities: ${selectedObj.amenities}</p>`;
@@ -597,8 +597,9 @@ var makePopupHTML = (placetype, selectedObj) => {
     return popupHTML
 }
 
-function addPlaceDiv(selectedObj, selectedChoice, placetype){
-  var temp = document.createElement('li')
+function addPlaceDiv(selectedObj, selectedChoice, Placetype){
+  var placetype = Placetype.toLowerCase();
+  var temp = document.createElement('li');
   temp.className = 'list-group-item';
 
   //make the button to remove the selected place
@@ -613,7 +614,7 @@ function addPlaceDiv(selectedObj, selectedChoice, placetype){
 
   // make popup
   var popup = new mapboxgl.Popup({offset: 25})
-      .setHTML(makePopupHTML(placetype, selectedObj))
+      .setHTML(makePopupHTML(Placetype, selectedObj))
   newmarker.setPopup(popup)
   newmarker.addTo(map)
   // make removal possible
@@ -625,9 +626,10 @@ function addPlaceDiv(selectedObj, selectedChoice, placetype){
   }
 }
 
-function addSelectedPlace(selectedObj, selectedChoice, placetype){
+function addSelectedPlace(selectedObj, selectedChoice, Placetype){
+  var placetype = Placetype.toLowerCase();
   if (plan.addPlaceToCurrentDay(placetype, selectedChoice)) {
-    addPlaceDiv(selectedObj, selectedChoice, placetype);
+    addPlaceDiv(selectedObj, selectedChoice, Placetype);
   }
 }
 
@@ -656,7 +658,7 @@ var setListeners = function(Placetype) {
   el(placetype + '-add').addEventListener('click', () => {
     var selectedChoice = el(placetype + '-choices').value // position in the array, not really the placeId
     var selectedObj = globalstore[Placetype][selectedChoice]
-    addSelectedPlace(selectedObj, selectedChoice, placetype);
+    addSelectedPlace(selectedObj, selectedChoice, Placetype);
     map.flyTo({center: selectedObj.place.location, zoom: 15, curve: 2, speed: 0.5});
   })
 }
